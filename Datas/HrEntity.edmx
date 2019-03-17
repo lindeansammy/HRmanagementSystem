@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="wpf_databaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="applicationDetails">
+          <Key>
+            <PropertyRef Name="appID" />
+          </Key>
+          <Property Name="appID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="jobID" Type="int" Nullable="false" />
+          <Property Name="applicationDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="job">
+          <Key>
+            <PropertyRef Name="jobID" />
+          </Key>
+          <Property Name="jobID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="jobName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="jobDescription" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="jobSalary" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="employer" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="datePosted" Type="date" Nullable="false" />
+          <Property Name="state" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="userInfo">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="firstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="phone" Type="bigint" Nullable="false" />
+          <Property Name="address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="experience" Type="int" Nullable="false" />
+          <Property Name="skill" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="position" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="type" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_userInfo">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="userInfo" Type="Self.userInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="userInfo">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK1_appdetails">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="applicationDetails" Type="Self.applicationDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="applicationDetails">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK2_appdetails">
+          <End Role="job" Type="Self.job" Multiplicity="1" />
+          <End Role="applicationDetails" Type="Self.applicationDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="job">
+              <PropertyRef Name="jobID" />
+            </Principal>
+            <Dependent Role="applicationDetails">
+              <PropertyRef Name="jobID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="wpf_databaseModelStoreContainer">
+          <EntitySet Name="applicationDetails" EntityType="Self.applicationDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="job" EntityType="Self.job" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userInfo" EntityType="Self.userInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_userInfo" Association="Self.FK_userInfo">
+            <End Role="users" EntitySet="users" />
+            <End Role="userInfo" EntitySet="userInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK1_appdetails" Association="Self.FK1_appdetails">
+            <End Role="users" EntitySet="users" />
+            <End Role="applicationDetails" EntitySet="applicationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK2_appdetails" Association="Self.FK2_appdetails">
+            <End Role="job" EntitySet="job" />
+            <End Role="applicationDetails" EntitySet="applicationDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="wpf_databaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="applicationDetail">
+          <Key>
+            <PropertyRef Name="appID" />
+          </Key>
+          <Property Name="appID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="jobID" Type="Int32" Nullable="false" />
+          <Property Name="applicationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="user" Relationship="Self.FK1_appdetails" FromRole="applicationDetails" ToRole="users" />
+          <NavigationProperty Name="job" Relationship="Self.FK2_appdetails" FromRole="applicationDetails" ToRole="job" />
+        </EntityType>
+        <EntityType Name="job">
+          <Key>
+            <PropertyRef Name="jobID" />
+          </Key>
+          <Property Name="jobID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="jobName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="jobDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="jobSalary" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="employer" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="datePosted" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="state" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="applicationDetails" Relationship="Self.FK2_appdetails" FromRole="job" ToRole="applicationDetails" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="userInfo">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="Int64" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="experience" Type="Int32" Nullable="false" />
+          <Property Name="skill" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="position" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user" Relationship="Self.FK_userInfo" FromRole="userInfo" ToRole="users" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="userID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="type" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="applicationDetails" Relationship="Self.FK1_appdetails" FromRole="users" ToRole="applicationDetails" />
+          <NavigationProperty Name="userInfo" Relationship="Self.FK_userInfo" FromRole="users" ToRole="userInfo" />
+        </EntityType>
+        <Association Name="FK1_appdetails">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="applicationDetails" Type="Self.applicationDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="applicationDetails">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK2_appdetails">
+          <End Role="job" Type="Self.job" Multiplicity="1" />
+          <End Role="applicationDetails" Type="Self.applicationDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="job">
+              <PropertyRef Name="jobID" />
+            </Principal>
+            <Dependent Role="applicationDetails">
+              <PropertyRef Name="jobID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userInfo">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="userInfo" Type="Self.userInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="userInfo">
+              <PropertyRef Name="userID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="wpf_databaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="applicationDetails" EntityType="Self.applicationDetail" />
+          <EntitySet Name="jobs" EntityType="Self.job" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="userInfoes" EntityType="Self.userInfo" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK1_appdetails" Association="Self.FK1_appdetails">
+            <End Role="users" EntitySet="users" />
+            <End Role="applicationDetails" EntitySet="applicationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK2_appdetails" Association="Self.FK2_appdetails">
+            <End Role="job" EntitySet="jobs" />
+            <End Role="applicationDetails" EntitySet="applicationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userInfo" Association="Self.FK_userInfo">
+            <End Role="users" EntitySet="users" />
+            <End Role="userInfo" EntitySet="userInfoes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="wpf_databaseModelStoreContainer" CdmEntityContainer="wpf_databaseEntities">
+          <EntitySetMapping Name="applicationDetails">
+            <EntityTypeMapping TypeName="wpf_databaseModel.applicationDetail">
+              <MappingFragment StoreEntitySet="applicationDetails">
+                <ScalarProperty Name="appID" ColumnName="appID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="jobID" ColumnName="jobID" />
+                <ScalarProperty Name="applicationDate" ColumnName="applicationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="jobs">
+            <EntityTypeMapping TypeName="wpf_databaseModel.job">
+              <MappingFragment StoreEntitySet="job">
+                <ScalarProperty Name="jobID" ColumnName="jobID" />
+                <ScalarProperty Name="jobName" ColumnName="jobName" />
+                <ScalarProperty Name="jobDescription" ColumnName="jobDescription" />
+                <ScalarProperty Name="jobSalary" ColumnName="jobSalary" />
+                <ScalarProperty Name="employer" ColumnName="employer" />
+                <ScalarProperty Name="datePosted" ColumnName="datePosted" />
+                <ScalarProperty Name="state" ColumnName="state" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="wpf_databaseModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userInfoes">
+            <EntityTypeMapping TypeName="wpf_databaseModel.userInfo">
+              <MappingFragment StoreEntitySet="userInfo">
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="experience" ColumnName="experience" />
+                <ScalarProperty Name="skill" ColumnName="skill" />
+                <ScalarProperty Name="position" ColumnName="position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="wpf_databaseModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
