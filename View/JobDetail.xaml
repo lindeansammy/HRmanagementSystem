@@ -1,0 +1,68 @@
+﻿<Window x:Class="WpfTeamProject.View.JobDetail"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:vm ="clr-namespace:WpfTeamProject.ViewModel"
+      xmlns:md ="clr-namespace:WpfTeamProject.Model"
+      mc:Ignorable="d" 
+      Height="250" Width="400" MinHeight="250" MinWidth="400"
+      Title="JobDetail"
+        x:Name="jobDetail"
+      >
+    <Window.Resources>
+        <vm:JobDetailViewModel x:Key="viewModel"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+
+        <StackPanel HorizontalAlignment="Center">
+            <Grid DataContext="{StaticResource viewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                    <RowDefinition  Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Column="0" Grid.Row="0" Content="Job Title:"  Margin="0,5,5,0" HorizontalAlignment="Left"/>
+                <Label Grid.Column="0" Grid.Row="1" Content="Company Name:"  Margin="0,5,5,0" HorizontalAlignment="Left"/>
+                <Label Grid.Column="0" Grid.Row="2" Content="Job Description:" Margin="0,5,5,0" HorizontalAlignment="Left" />
+                <Label Grid.Column="0" Grid.Row="3" Content="Salary:" Margin="0,5,5,0" HorizontalAlignment="Left" />
+                <Label Grid.Column="0" Grid.Row="4" Content="JobS Status:" Margin="0,5,5,0" HorizontalAlignment="Left" />
+
+                <TextBox Grid.Column="1" Grid.Row="0" x:Name="txt_JobName" 
+                         Text="{Binding JobTitle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0,11,0,0" />
+                <TextBox Grid.Column="1" Grid.Row="1" x:Name="txt_Company"
+                         Text="{Binding Employer,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0,12,0,0" />
+                <TextBox Grid.Column="1" Grid.Row="2"  x:Name="txt_Description"
+                         Text="{Binding JobDescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0,12,0,0" />
+                <TextBox Grid.Column="1" Grid.Row="3"  x:Name="txt_Salary"
+                         Text="{Binding Salary,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="150" Margin="0,10,0,0" />
+                <CheckBox Grid.Column="1" Grid.Row="4"  x:Name="chk_Status"
+                          IsChecked="{Binding Status,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Content="Action" Margin="0,14,0,0" />
+            </Grid>            
+        </StackPanel>
+        
+
+        <WrapPanel DataContext="{StaticResource viewModel}" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button x:Name="btn_Save" Content="Save" 
+                    Command="{Binding SaveCommand}" Width="75" Margin="10"/>
+            <Button x:Name="btn_Edit" Content="Edit" Width="75" Margin="10"
+                    Command="{Binding EditCommand}" />
+            <Button x:Name="btn_Cancel" Content="Cancel" Width="75" Margin="10"
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=jobDetail}"/>
+        </WrapPanel>
+
+
+    </Grid>
+</Window>

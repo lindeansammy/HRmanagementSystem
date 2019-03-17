@@ -1,0 +1,89 @@
+﻿<Window x:Class="WpfTeamProject.View.AdminList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WpfTeamProject.ViewModel"
+        xmlns:local="clr-namespace:WpfTeamProject.View"
+        xmlns:dt ="clr-namespace:WpfTeamProject.Datas"
+        x:Name="AdminListWindow"
+        mc:Ignorable="d"
+        Title="AdminList" Height="630" Width="680" MinHeight="630" MinWidth="680"
+        >
+
+    <Window.Resources>
+        <vm:AdminListViewModel x:Key="ViewModel"/>
+        <dt:job x:Key="job"/>
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource ViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <WrapPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left">
+            <Label Content="Search job:" Margin="10" />
+            <TextBox x:Name="txt_SearchJob" Height="23" Text="" Width="200" Margin="10"/>
+        </WrapPanel>
+
+        <Button Command="{Binding SearchJobCommand}" CommandParameter="{Binding ElementName=txt_SearchJob, Path=Text}" Grid.Column="1" Grid.Row="0" Content="Search Job" Width="98" Margin="10"/>
+
+        <ListView x:Name="LtV_Jobs" Grid.Column="0" Grid.Row="1" Margin="10"
+                  ItemsSource="{Binding Jobs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="JobID" DisplayMemberBinding="{Binding jobID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <GridViewColumn Header="JobName" DisplayMemberBinding="{Binding jobName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }"/>
+                    <GridViewColumn Header="JobDescription" DisplayMemberBinding="{Binding jobDescription,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <GridViewColumn Header="Employer" DisplayMemberBinding="{Binding employer,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <WrapPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal">
+            <Label Content="Search User:" Margin="10" />
+            <TextBox x:Name="txt_SearchUser" Height="23" Text="" Width="200" Margin="10"/>
+        </WrapPanel>
+
+        <Button Command="{Binding SearchUserCommand}" CommandParameter="{Binding ElementName=txt_SearchUser,Path=Text}" Grid.Column="1" Grid.Row="2" Content="Search User" Width="98" Margin="10"/>
+
+        <ListView Grid.Column="0" Grid.Row="3" Margin="10"
+                  ItemsSource="{Binding UserModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="UserID" DisplayMemberBinding="{Binding UserID}"/>
+                    <GridViewColumn Header="FullName" DisplayMemberBinding="{Binding FullName}"/>
+                    <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}"/>
+                    <GridViewColumn Header="Phone" DisplayMemberBinding="{Binding Phone}"/>
+                    <GridViewColumn Header="Position" DisplayMemberBinding="{Binding Position}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
+            <Button Content="Add" Width="98" Margin="20" Command="{Binding AddJobCommand}" />
+            <Button Content="Edit" Width="98" Margin="20,0,20,20" Command="{Binding EditJobCommand}" CommandParameter="{Binding ElementName=LtV_Jobs,Path=SelectedItem}"/>
+            <Button Content="Delete" Width="98" Margin="20,0,20,20" Command="{Binding DeleteJobCommand}" CommandParameter="{Binding ElementName=LtV_Jobs,Path=SelectedItem}" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="3">
+            <Button Content="Delete" Width="98" Margin="20" />
+        </StackPanel>
+
+        <WrapPanel Grid.ColumnSpan="2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Content="Add Admin" Width="75" Margin="20" Command="{Binding AddAdminCommand}"/>
+            <Button Content="Sign out" Width="75" Margin="0,20,20,20" Command="{Binding SignOutCommand}" CommandParameter="{Binding ElementName=AdminListWindow}" />
+        </WrapPanel>
+
+    </Grid>
+</Window>

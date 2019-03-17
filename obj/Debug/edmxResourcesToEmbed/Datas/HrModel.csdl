@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="wpf_databaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="applicationDetail">
+    <Key>
+      <PropertyRef Name="appID" />
+    </Key>
+    <Property Name="appID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userID" Type="Int32" Nullable="false" />
+    <Property Name="jobID" Type="Int32" Nullable="false" />
+    <Property Name="applicationDate" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="user" Relationship="Self.FK1_appdetails" FromRole="applicationDetails" ToRole="users" />
+    <NavigationProperty Name="job" Relationship="Self.FK2_appdetails" FromRole="applicationDetails" ToRole="job" />
+  </EntityType>
+  <EntityType Name="job">
+    <Key>
+      <PropertyRef Name="jobID" />
+    </Key>
+    <Property Name="jobID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="jobName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="jobDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="jobSalary" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="employer" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="datePosted" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="state" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="applicationDetails" Relationship="Self.FK2_appdetails" FromRole="job" ToRole="applicationDetails" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="userInfo">
+    <Key>
+      <PropertyRef Name="userID" />
+    </Key>
+    <Property Name="userID" Type="Int32" Nullable="false" />
+    <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="phone" Type="Int64" Nullable="false" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="experience" Type="Int32" Nullable="false" />
+    <Property Name="skill" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="position" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="user" Relationship="Self.FK_userInfo" FromRole="userInfo" ToRole="users" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="userID" />
+    </Key>
+    <Property Name="userID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="type" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="applicationDetails" Relationship="Self.FK1_appdetails" FromRole="users" ToRole="applicationDetails" />
+    <NavigationProperty Name="userInfo" Relationship="Self.FK_userInfo" FromRole="users" ToRole="userInfo" />
+  </EntityType>
+  <Association Name="FK1_appdetails">
+    <End Role="users" Type="Self.user" Multiplicity="1" />
+    <End Role="applicationDetails" Type="Self.applicationDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userID" />
+      </Principal>
+      <Dependent Role="applicationDetails">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK2_appdetails">
+    <End Role="job" Type="Self.job" Multiplicity="1" />
+    <End Role="applicationDetails" Type="Self.applicationDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="job">
+        <PropertyRef Name="jobID" />
+      </Principal>
+      <Dependent Role="applicationDetails">
+        <PropertyRef Name="jobID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_userInfo">
+    <End Role="users" Type="Self.user" Multiplicity="1" />
+    <End Role="userInfo" Type="Self.userInfo" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userID" />
+      </Principal>
+      <Dependent Role="userInfo">
+        <PropertyRef Name="userID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="wpf_databaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="applicationDetails" EntityType="Self.applicationDetail" />
+    <EntitySet Name="jobs" EntityType="Self.job" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="userInfoes" EntityType="Self.userInfo" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="FK1_appdetails" Association="Self.FK1_appdetails">
+      <End Role="users" EntitySet="users" />
+      <End Role="applicationDetails" EntitySet="applicationDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK2_appdetails" Association="Self.FK2_appdetails">
+      <End Role="job" EntitySet="jobs" />
+      <End Role="applicationDetails" EntitySet="applicationDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_userInfo" Association="Self.FK_userInfo">
+      <End Role="users" EntitySet="users" />
+      <End Role="userInfo" EntitySet="userInfoes" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
